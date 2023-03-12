@@ -3,22 +3,18 @@ title: Introduction
 type: docs
 ---
 
-# Acerbo datus maxime
+# Generalised Linear Mixed Models
 
 {{< columns >}}
-## Astris ipse furtiva
+## Study design and analysis
 
-Est in vagis et Pittheus tu arge accipiter regia iram vocatur nurus. Omnes ut
-olivae sensit **arma sorori** deducit, inesset **crudus**, ego vetuere aliis,
-modo arsit? Utinam rapta fiducia valuere litora _adicit cursu_, ad facies
+Generalised linear mixed models are used to analyse and design a wide variety of experimental study designs. This webpage provides vignettes and resources discussing methods for model fitting, optimal study designs, and more. We focus particularly on cluster randomised trials.
 
 <--->
 
-## Suis quot vota
+## The `glmmr` packages
 
-Ea _furtique_ risere fratres edidit terrae magis. Colla tam mihi tenebat:
-miseram excita suadent es pecudes iam. Concilio _quam_ velatus posset ait quod
-nunc! Fragosis suae dextra geruntur functus vulgata.
+We have built the `glmmr` packages for R, which provide a range of methods for generalised linear mixed models. The main package is `glmmrBase`, which provides model fitting using approximate and full likelihood approaches, power calculations, model specification tools, and other functions. `glmmrOptim` provides a set of algorithms for identifying optimal designs. We use these packages and other relevant R packages in these vignettes.
 {{< /columns >}}
 
 
@@ -36,6 +32,4 @@ sequens!
                 graphicsNvramCdma, lpi_footer_snmp, integer_model));
     }
 
-## Locis suis novi cum suoque decidit eadem
 
-Idmoniae ripis, at aves, ali missa adest, ut _et autem_, et ab?
