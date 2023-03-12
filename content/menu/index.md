@@ -2,19 +2,26 @@
 headless: true
 ---
 
-- [**Cluster Trials**]({{< relref "/docs/example" >}})
-- [Table of Contents]({{< relref "/docs/example/table-of-contents" >}})
-  - [With ToC]({{< relref "/docs/example/table-of-contents/with-toc" >}})
-  - [Without ToC]({{< relref "/docs/example/table-of-contents/without-toc" >}})
-- [Collapsed]({{< relref "/docs/example/collapsed" >}})
-  - [3rd]({{< relref "/docs/example/collapsed/3rd-level" >}})
-    - [4th]({{< relref "/docs/example/collapsed/3rd-level/4th-level" >}})
+- [**What is a GLMM?**]({{< relref "/docs/glmm" >}})
+
+- [**glmmr**]({{< relref "/docs/glmmr" >}})
+- [Making a model]({{< relref "/docs/glmmr/model" >}})
+  - [Formula Specification]({{< relref "/docs/glmmr/model/model_specification" >}})
+  - [Model Class Specification]({{< relref "/docs/glmmr/model/model_code" >}})
+  - [Model Class Functions]({{< relref "/docs/glmmr/model/model_functions" >}})
+  - [Examples]({{< relref "/docs/glmmr/model/model_examples" >}})
+- [Generating data]({{< relref "/docs/glmmr/creating_data" >}})
 <br />
 
-- [**Other**]({{< relref "/docs/example" >}})
-- [Table of Contents]({{< relref "/docs/example/table-of-contents" >}})
-  - [With ToC]({{< relref "/docs/example/table-of-contents/with-toc" >}})
+- [**Cluster Trials**]({{< relref "/docs/cluster" >}})
+- [Power calculations]({{< relref "/docs/cluster/power" >}})
+  - [Approximations]({{< relref "/docs/cluster/power/approximations" >}})
+  - [Calculating in glmmr]({{< relref "/docs/cluster/power/power_glmmr" >}})
+  - [Comparison of methods]({{< relref "/docs/cluster/power/comparisons" >}})
+  - [Simulation]({{< relref "/docs/cluster/power" >}})
 <br />
+
+
 
 - **Shortcodes**
 - [Buttons]({{< relref "/docs/shortcodes/buttons" >}})
