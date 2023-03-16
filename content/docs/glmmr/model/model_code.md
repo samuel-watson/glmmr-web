@@ -54,6 +54,12 @@ where we also provide logit, inverse, and identity link functions for the specif
 Data are required to build the matrices and perform the calculations. When we want to analyse a study design prior to data being collected we will have to create our own covariate data for this purpose. We provide several useful functions to create `data.frame`s with different structures to support generating dummy data, see [Generating data](../creating_data).
 
 ## Parameter values
+Parameter values are required to generate the matrices of the GLMM or act as starting values for model fitting algorithms. If they are not specified then default values are used. Parameter values are given separately to the `mean` and `covariance` arguments when specifying a new model object; values are passed as a vector in the order they appear in the formula. For example, for the mean function we might specify (where we include the formula for clarity):
+```
+mean = list(formula = ~x1 + x2,
+            parameters = c(-1,1,2))
+```
+to get the formula (or starting values) $-1 + x_1 + 2x_2$. Similarly, for a covariance function:
 
 
 
