@@ -6,11 +6,11 @@ weight: 1
 # Marginal standardisation with mixed models
 Note: this is preliminary work and may contain errors.
 
-The basic presentation of marginal standardisation in the epidemiological literature is of averaging the effect of an exposure over a discrete confounder. For example, if $Z$ is our confounder $Pr(outcome \vert exposure) = \sum_{Z}Pr(outcome \vert exposure, Z=z)Pr(Z=z)$. The idea is to obtain population averaged effects. Marginal standardisation is also used in the trials literature, often to obtain relative risks or risk differences from models like a Binomial-logistic that does not naturally have that interpretation and where there may be covariates. We can calculated fitted probabilities for trial participants under both treatment and control conditions and then take their ratio or difference. Things become more complex though when we have clustering or correlation between the observations as we need to also average over the random effects in a mixed model. This document is a proposal for how one could do that. I'll provide a statistical explanation of the idea then some code to implement it in R.
+The basic presentation of marginal standardisation in the epidemiological literature is of averaging the effect of an exposure over a discrete confounder. For example, if $Z$ is our confounder $Pr(outcome \vert exposure) = \sum_{Z}Pr(outcome \vert exposure, Z=z)Pr(Z=z)$. The idea is to obtain population averaged effects. Marginal standardisation is also used in the trials literature, often to obtain relative risks or risk differences from models like a Binomial-logistic that do not naturally have that interpretation and where there may be covariates. We can calculate fitted probabilities for trial participants under both treatment and control conditions and then take their ratio or difference. Things become more complex though when we have clustering or correlation between the observations as we need to also average over the random effects in a mixed model. This document is a proposal for how one could do that. I'll provide a statistical explanation of the idea then some code to implement it in R.
 
 ## Statistical model
 ### Relative risk
-To generalise the description above we assume that the covariates are stochastic and drawn from some set of possible value $X \in \mathcal{X}$. We assume a [generalise linear mixed model](../docs/glmm/_index.md), which have the random effects $\mathbf{u} \sim N(0,D)$. We use $d$ to represent our treatment effect indicator. The linear predictor for an individual $i=1,...,n$ is then:
+To generalise the description above we assume that the covariates are stochastic and drawn from some set of possible value $X \in \mathcal{X}$. We assume a [generalised linear mixed model](../docs/glmm/_index.md), which have the random effects $\mathbf{u} \sim N(0,D)$. We use $d$ to represent our treatment effect indicator. The linear predictor for an individual $i=1,...,n$ is then:
 $$
 \eta_i = d_i \alpha + x_i \gamma + z_i \mathbf{u}
 $$
@@ -56,9 +56,10 @@ $$
 E_X[E_{\mathbf{u}}[\nabla_\beta \mu_d(\mathbf{u},X,\Theta)]]= \frac{1}{N}E_{\mathbf{u}}[ X^{*T} \mu_d(\mathbf{u},X,\Theta) (1-\mu_d(\mathbf{u},X,\Theta)) ]
 $$
 $$
- \approx \frac{1}{NM} \sum_{m=1}^M X^{*T} \mu_d(\hat{\mathbf{u}}^m,X,\Theta)
+  \approx \frac{1}{NM} \sum_{m=1}^M X^{*T} \mu_d(\hat{\mathbf{u}}^m,X,\Theta)
 $$
-where $X^{*}$ just means the matrix $X$ with the treatment indicator added as an additional column.
+
+where $X^*$ just means the matrix $X$ with the treatment indicator added as an additional column.
 
 The standard error for the log relative risk is then given by:
 $$
