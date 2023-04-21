@@ -23,6 +23,7 @@ headless: true
 - [**Other**]({{< relref "/other" >}})
   - [Marginal standardisation]({{< relref "/other/marginal" >}})
   - [Bayesian Survival Analysis]({{< relref "/other/survival" >}})
+  - [Girling Algorithm]({{< relref "/other/girlingalgo" >}})
 <br />
 
 - **Shortcodes**
