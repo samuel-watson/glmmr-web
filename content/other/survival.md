@@ -83,7 +83,7 @@ parameters{
   real mu;
   real<lower=0> lambda;
 }
-transformed parameters {
+transformed data {
   int ntime = startend[2] - startend[1]; // number of time points
 }
 model{
@@ -156,26 +156,26 @@ parameters{
   real mu;
   simplex[S] coef_s; // spline parameters
 }
-transformed parameters {
-  int ntime = startend[2] - startend[1]; // number of time points
+transformed data {
+  int ntime = startend[2] - startend[1] + 1; // number of time points
 }
-model{
-  //vectors to hold the splines and linear predictor
+transformed parameters {
   vector[N] msp1; 
   vector[N] isp1;
   vector[N] eta;
 
-  //priors
-  mu ~ normal(0,5);
-  beta ~ normal(0,1);
-  coef_s ~ normal(0,1);
-  
   //linear predictors
   for(n in 1:N){
     eta[n] = mu + x[n]*beta;
     msp1[n] = msp[n] * coef_s;
     isp1[n] = isp[n] * coef_s;
   }
+}
+model{
+  //priors
+  mu ~ normal(0,5);
+  beta ~ normal(0,1);
+  coef_s ~ normal(0,1);
 
   //model
   for(n in 1:N){
@@ -193,7 +193,7 @@ generated quantities{
   vector[N] runif; // vector of random numbers
   vector[N] pred_times;
   vector[Npred] pred_times_new;
-  array[Npred,ntime] int surv_prob;
+  array[N,ntime] int surv_prob;
   
   for(n in 1:N){
     log_lik[n] = (1-y[n])*ms_surv_lpdf(time[n] | isp1[n], eta[n]);
@@ -270,8 +270,21 @@ ggplot()+
 ```
 adding any extra options to make it pretty. This should be repeated for each model.
 
-The survival curve is much the same. We just need to produce a data frame that has the predicted probabilities for each draw. TO BE COMPLETED!
-
+The survival curve is much the same. We just need to produce a data frame that has the predicted probabilities for each draw. In the model above we have included a matrix in the generated quantities `surv_prob` that generates predicted probabilities for each observation that the survival time will be longer than $t$. We can extract and plot this to generate a predicted survival function. For example,
+```
+probs <- fit.exp.1$draws("surv_prob",format="matrix")
+iters <- sample(1:4000,100) 
+dfp <- data.frame(t = rep(1:19,100), iter = rep(1:100,each=19), prob = NA) 
+for(i in 1:100){ 
+  for(j in 1:19){ 
+    dfp[dfp$iter == i & dfp$t == j, 'prob'] <- mean(probs[iters[i], (1+1203*(j-1)):(1203*j)]) 
+   } 
+}
+```
+Then we could add a sample of curves to a Kaplan-Meier plot, for example
+```
+km1 + geom_line(data=dfp,aes(x=t,y=prob,group=iter),colour="blue",alpha=0.2)
+```
 
 ### Model fit statistics
 To get the WAIC we can use:
@@ -287,4 +300,3 @@ The lower the number, the better the fit!
 
 ## Required probabilities
 Here we just need to look at the probabilities for each of the predicted values that it is less than the national average, or other relevant comparator. We will do this with our best fitting model. The predicted values are in `pred_times_new`, and the ordering of the columns will be the same as the rows of `xpred`. To extract the data we can use `out <- fit$draws("pred_times_new",format="draws_matrix")`. The mean values will be `colMeans(out)` and the 95\% credible intervals `apply(out,2,function(x)quantile(x,0.025))` for the lower interval and similarly for the upper interval. To get the probability the $i$th value is below a threshold $a$, we can do `length(out[out[,i]<a,i])/nrow(out)`. 
-TO BE COMPLETED.  
