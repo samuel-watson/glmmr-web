@@ -35,10 +35,16 @@ $\vert . \vert$ is the Euclidean distance. $K_a$ is the modified Bessel function
 *Variable $y$ is defined as $x/r$ where $r$ is the effective range. For the compactly supported functions $d$ is the number of dimensions in `x`. 
 **Permissible in one or two dimensions. ***Only permissible in one dimension. ****Permissible in up to three dimensions.
 
-One combines functions to provide the desired covariance function. For example, for a stepped-wedge cluster trial we could consider the standard specification with an exchangeable random effect for the cluster level, and a separate exchangeable random effect for the cluster-period, which would be `~(1|gr(j))+(1|gr(j,t))`. Alternatively, we could consider an autoregressive cluster-level random effect that decays exponentially over time so that, for persons $i$ in cluster $j$ at time $t$, $Cov(y_{ijt},y_{i'jt}) = \theta_1$, for $i\neq i'$, $Cov(y_{ijt},y_{i'jt'}) = \theta_1 \theta_2^{\vert t-t' \vert}$ for $t \neq t'$, and $Cov(y_{ijt},y_{i'j't}) = 0$ for $j \neq j'$. This function would be specified as `~(1|gr(j)*ar1(t))`.
+One combines functions to provide the desired covariance function. For example, for a stepped-wedge cluster trial we could consider the standard specification with an exchangeable random effect for the cluster level, and a separate exchangeable random effect for the cluster-period, which would be `~(1|gr(j))+(1|gr(j,t))`. Alternatively, we could consider an autoregressive cluster-level random effect that decays exponentially over time so that, for persons $i$ in cluster $j$ at time $t$, $Cov(y_{ijt},y_{i'jt}) = \theta_1$, for $i\neq i'$, $Cov(y_{ijt},y_{i'jt'}) = \theta_1 \theta_2^{\vert t-t' \vert}$ for $t \neq t'$, and $Cov(y_{ijt},y_{i'j't}) = 0$ for $j \neq j'$. This function would be specified as `~(1|gr(j)*ar(t))`.
 
-The above elements can be combined to create relatively complex random effects structures such as `(x|gr(j))+(1|fexp(x,y)*ar(t))`. The current version does not yet support correlated random effects terms, but this is planned for a future version.
+The above elements can be combined to create relatively complex random effects structures such as `(x|gr(j))+(1|fexp(x,y)*ar(t))`. The current version does not yet support correlated random effects terms, but this is planned for a future version. Additional functions can be added on request.
 
 ## Adding the fixed effects
 The fixed effects are specified in the same was as other R packages and the random effects can just be added onto the end. For example, to continue our stepped-wedge cluster trial example, we may want to include fixed effect indicators for each time period `t`, and indicator for the intervention `int`, and remove the intercept: `~ factor(t)+ int - 1 + (1|gr(j)*ar1(t))`.
+
+We can also specify non-linear fixed effects models and include desired parameter names in the formula. For example, the fixed effect specification
+$$$
+\eta_i = \beta_0 + \beta_1*int_i + \beta_2\exp(\beta_3 x_i)
+$$$
+can be written as `~ int + beta_2*exp(beta_3 * x)`. The interpreter assumes that any token (i.e. string of characters) that isn't the name of a variable or function is the name of a parameter. The formula is stored as a sequence of mathematical operations. An auto-differentiation scheme is used to calculate the relevant derivative for model fitting and other operations.
 

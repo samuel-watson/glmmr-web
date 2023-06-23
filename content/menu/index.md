@@ -11,11 +11,13 @@ headless: true
     - [Model Class Functions]({{< relref "/docs/glmmr/model/model_functions" >}})
     - [Examples]({{< relref "/docs/glmmr/model/model_examples" >}})
   - [Generating data]({{< relref "/docs/glmmr/creating_data" >}})
+  - [Model fitting]({{< relref "/docs/glmmr/model/model_fitting" >}})
+  - [Optimal designs]({{< relref "/docs/glmmr/model/optimal_designs" >}})
 <br />
 
 - [**Cluster Trials**]({{< relref "/docs/cluster" >}})
   - [Power calculations]({{< relref "/docs/cluster/power" >}})
-    - [Estimating power]({{< relref "/docs/cluster/power/approximations" >}})
+    - [Estimating power example]({{< relref "/docs/cluster/power/approximations" >}})
     - [Simulation]({{< relref "/docs/cluster/power/simulation" >}})
     - [Comparison of methods]({{< relref "/docs/cluster/power/comparisons" >}})
 <br />
@@ -26,12 +28,4 @@ headless: true
   - [Girling Algorithm]({{< relref "/other/girlingalgo" >}})
 <br />
 
-- **Shortcodes**
-- [Buttons]({{< relref "/docs/shortcodes/buttons" >}})
-- [Columns]({{< relref "/docs/shortcodes/columns" >}})
-- [Expand]({{< relref "/docs/shortcodes/expand" >}})
-- [Hints]({{< relref "/docs/shortcodes/hints" >}})
-- [KaTex]({{< relref "/docs/shortcodes/katex" >}})
-- [Mermaid]({{< relref "/docs/shortcodes/mermaid" >}})
-- [Tabs]({{< relref "/docs/shortcodes/tabs" >}})
 <br />
