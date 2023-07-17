@@ -26,6 +26,11 @@ headless: true
   - [Marginal standardisation]({{< relref "/other/marginal" >}})
   - [Bayesian Survival Analysis]({{< relref "/other/survival" >}})
   - [Girling Algorithm]({{< relref "/other/girlingalgo" >}})
+  - [Optimal design examples]({{< relref "/other/optimal_examples" >}})
+<br />
+
+- [**C++ API**]({{< relref "/docs/cpp" >}})
+  - [C++ library]({{< relref "/docs/cpp/cpp_interface" >}})
 <br />
 
 <br />

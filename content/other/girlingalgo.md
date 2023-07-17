@@ -112,12 +112,16 @@ where we've used the programming syntax $a += b$ to mean $a = a + b$.
 # Example with code
 We provide an example here on executing the above algorithm using `glmmrBase`. The algorithm isn't exposed to the user in the released package yet, as it hasn't been published and fully tested, but it is still hiding in the package! We will aim to find the optimal weights for cluster-periods in a stepped-wedge cluster trial design with six cluster sequences and seven time periods. The links in the menu to the left provide more information on model specification and other features (which are due to be completed), so the exposition here will be fairly bare bones.
 
-We first generate a dataset with six cluster and seven time periods with one observation per cluster, adding in the treatment effect
+We first generate a dataset with six cluster and seven time periods with ten observation per cluster, adding in the treatment effect
 ```
-df <- nelder(~ (cl(6)*t(7)) > ind(1))
+df <- nelder(~ (cl(6)*t(7)) > ind(10))
 df$int <- 0
 df[df$t > df$cl, 'int'] <- 1
 ```
+As the algorithm calculates weights for unique experimental conditions, we could set the number of individuals to one per cluster-period and then indpendently tell the algorithm the total sample size $N$. The alternative, and the approach taken below,
+is to generate a design with all the observations as above, and then the function will just use the total number of observations as 
+$N$.
+
 Now, we will generate a linear mixed model with autoregressive covariance function (although one can use any covariance function with this package). In particular, the covariance function for cluster $k$ and time $t$, if $z_{kt}\mathbf{u} = \alpha_{kt}$ is the random effect term, is:
 $$
 \text{Cov}(\alpha_{kt},\alpha_{k',t'}) = \begin{cases}
@@ -125,28 +129,26 @@ $$
 0 & \text{ otherwise}
 \end{cases}
 $$
-We will choose covariance parameter values of $\sigma^2 = 1$, $\tau = 0.25$ and $\lambda = 0.8$. The model is set up as:
+We will choose covariance parameter values of $\sigma^2 = 1$, $\tau^2 = 0.05$ and $\lambda = 0.8$. The model is set up as:
 ```
 model <- Model$new(
   formula = ~ factor(t) + int - 1 + (1|gr(cl)*ar1(t)),
-  covariance = list(parameters = c(0.25,0.8)),
+  covariance = list(parameters = c(0.05,0.8)),
   family = gaussian(),
   data = df
 )
 ```
-The default values are $\sigma^2 = 1$ and $\beta = 0$ so these are not directly set here. The syntax for the call to the algorithm is not very user friendly on account of it being hidden. We first have to get the model to generate its internal C++ representation,
-which is normally automatic. Then in the call to the `girling_algorithm` function we provide the pointer to this model, a target sample size (100 here, although it currently does nothing), the model marginal variance, the vector $c$ and the tolerance:
+The default values are $\sigma^2 = 1$ and $\beta$ is initialised to random values, so these are not directly set here. The Girling Algorithm has now been added to `glmmrOptim`. As with all other algorithms in the package, we first create a design space:
 ```
-model$.__enclos_env__$private$update_ptr(y = rep(0,model$n())) 
-w <- glmmrBase:::.girling_algorithm(model$.__enclos_env__$private$ptr,
-                               100,
-                               sigma_sq_ = 1,
-                               C_ = c(rep(0,7),1),
-                               tol_ = 1e-6)
+ds <- DesignSpace$new(des)
 ```
-This takes about 50 milliseconds to run. And produces the weights shown in the figure.
+And, then specify the option `algo="girling"` in the call to `optim()`:
+```
+outb <- ds$optimal(m=1,C = list(c(rep(0,5),1)),verbose = TRUE,algo="girling")
+```
+The first argument `m` is redundant so we just set it to one. This takes about 50 milliseconds to run. And produces the weights shown in the figure.
 
-![Optimal design weights](/images/example_girling_plot.jpg)
+![Optimal design weights](images/example_girling_plot.jpg)
 
 ## Rounding weights
 There are several ways of rounding design weights to whole numbers of clusters, which are described in Watson & Pan (2023). The function `apportion` in our `glmmrOptim` package calculates all of the different rounding schemes. It turns out to be very slow for 42 weights because the method proposed by Puckelsheim and Rieder calculates all possible combinations of design points with zero weight and so increases exponentially. For this example, we just use Hamilton's method to round the weights, which seems to perform the best in almost all the tests we have done. This rounding is quite simple; we will create a design with 100 observations:
@@ -162,4 +164,4 @@ if(sum(des)<n){
 ```
 which produces the totals in the figure below.
 
-![Optimal design weights](/images/example_girling_rounded.jpg)
+![Optimal design weights](images/example_girling_rounded.jpg)

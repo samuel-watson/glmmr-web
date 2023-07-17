@@ -5,7 +5,7 @@ weight: 1
 
 # Creating data
 The package includes the function `nelder()`, which we use to generate data for the examples below. [Nelder (1965)](https://royalsocietypublishing.org/doi/10.1098/rspa.1965.0012) suggested a simple notation that could express a large variety of different blocked designs. The notation was proposed in the context of split-plot experiments for agricultural research, where researchers often split areas of land into blocks, sub-blocks, and other smaller divisions, and apply different combinations of treatments. However, the notation is useful for expressing a large variety of experimental designs with correlation and clustering including cluster trials, cohort studies, and spatial and temporal 
-prevalence surveys. We have included the function \code{nelder()} that generates a data frame of a design using the notation. 
+prevalence surveys. We have included the function `nelder()` that generates a data frame of a design using the notation. 
 
 There are two operations:
 * `>` (or $\to$ in Nelder's notation) indicates "clustered in".
