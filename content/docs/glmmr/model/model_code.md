@@ -7,10 +7,10 @@ weight: 1
 The `glmmrBase` package defines the `Model` class, which is built on the [R6](https://r6.r-lib.org/articles/Introduction.html) class system. R6 classes are object orientated, which means that when you create a new object of an R6 class, it has a set of methods and objects that "belong" to it. In the case of the `Model` class, it generates and stores all the relevant matrices for the GLMM internally. One can then call functions that belong the object to access or use the stored data. We discuss the 
 
 The arguments to create a new `Model` object are:
-* `formula`: A fomrula specifying the GLMM, see [Formula specification](model_specification). This can be omitted and separate formula specified to the arguments to `covariance` and `mean` below.
-* `covariance`: An optional list. The list can contain a formula, parameter values, and data. 
-* `mean`: An optional list. The list can contain a formula, parameter values, and data.
-* `var_par`: Optionally, the (starting) value of the scale parameter.
+* `formula`: A formula specifying the GLMM, see [Formula specification](model_specification). Can include non-linear functions of the fixed effects.
+* `covariance`: Optional. Generally, a vector of the parameter values otherwise it can be a list with a formula, parameter values, and data. 
+* `mean`: Optional. Generally, a vector of the parameter values otherwise it can be a list with a formula, parameter values, and data. 
+* `var_par`: Optional. The (starting) value of the scale parameter.
 * `data`: A data frame with the data for the model. This can be omitted if data are provided separately to the `mean` and `covariance` arguments via their lists.
 * `family`: An R family.
 * `offset`: An optional vector of offset values

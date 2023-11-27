@@ -43,8 +43,19 @@ The above elements can be combined to create relatively complex random effects s
 The fixed effects are specified in the same was as other R packages and the random effects can just be added onto the end. For example, to continue our stepped-wedge cluster trial example, we may want to include fixed effect indicators for each time period `t`, and indicator for the intervention `int`, and remove the intercept: `~ factor(t)+ int - 1 + (1|gr(j)*ar1(t))`.
 
 We can also specify non-linear fixed effects models and include desired parameter names in the formula. For example, the fixed effect specification
-$$$
+$$
 \eta_i = \beta_0 + \beta_1*int_i + \beta_2\exp(\beta_3 x_i)
-$$$
-can be written as `~ int + beta_2*exp(beta_3 * x)`. The interpreter assumes that any token (i.e. string of characters) that isn't the name of a variable or function is the name of a parameter. The formula is stored as a sequence of mathematical operations. An auto-differentiation scheme is used to calculate the relevant derivative for model fitting and other operations.
+$$
+can be written as `~ int + beta_2*exp(beta_3 * x)`. The interpreter assumes that any token (i.e. string of characters) that isn't the name of a variable or function is the name of a parameter. The formula is stored as a sequence of mathematical operations. By default, any data names will have a parameter attached to them, for example `exp(-x/2)` will be interpreted as $\exp(- \beta_x x / 2)$. To include data without a parameter, wrap it in brackets, for example `exp(-(x)/2)` will be interpreted as $\exp(- x / 2)$. This approach could also be used to add offsets, such as `+ (x) + ...`. One can check how the program has interpreted the formula using `model$print_instructions()`, which will print out the steps used to calculate the mean. An auto-differentiation scheme is used to calculate the relevant derivative for model fitting and other operations.
+
+As an example using the model and printing the instructions gives us:
+```
+model <- Model$new(
+    formula = ~ int + beta_2*exp(beta_3 * x) + (1|gr(j)*ar1(t)),
+    data = data,
+    family = gaussian()
+)
+model$print_instructions()
+
+```
 
