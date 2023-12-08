@@ -38,6 +38,7 @@ headless: true
 
 - [**C++ API**]({{< relref "/docs/cpp" >}})
   - [C++ library]({{< relref "/docs/cpp/cpp_interface" >}})
+  - [Rcpp design with multiple templated classes]({{< relref "/docs/cpp/rcpp_variant" >}})
 <br />
 
 <br />
